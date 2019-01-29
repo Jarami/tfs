@@ -1,0 +1,320 @@
+<!doctype html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <style>
+      *{
+        margin: 0;
+        padding: 0;
+      }
+      input{
+        height: 1.55em;
+        padding: 2px;
+        margin: 2px;
+      }
+      label, button{
+        min-width: 3em;
+        padding: 2px 1em;
+        height: 2em;
+        margin: 2px;
+      }
+      input{
+        width: 10em;
+      }
+      label{
+         width: 30em;
+      }
+      #file-list{
+        border: 1px solid black;
+        height: 30em;
+        overflow: auto;
+        font-size: 16px;
+        margin: 10px;
+      }
+      #output{
+        border: 1px solid black;
+        height: 10em;
+        font-size: 16px;
+        margin: 10px;
+      }
+      .controls{
+        margin: 5px;
+      }
+    </style>
+  </head>
+  <body>
+   
+    <div class="controls">
+      <label for="changeset">Changeset</label><input id="changeset"/>
+      <button action="get-files">Show</button>
+      <button action="clear-all">ClearAll</button>
+    </div>
+    <pre id="file-list"></pre>
+    <div class="controls">
+      <label for="label">Label name</label><input id="label"/>
+      <button action="label-files">Label</button>
+    </div>
+    <div id="output">
+      
+    </div>
+    
+    <script>
+      function Controller(){
+      
+        var fileList = document.getElementById("file-list");
+        this.clearAll = function(){
+          fileList.textContent = "";
+        }
+        
+        var changeset = document.getElementById("changeset");
+        this.getFiles = function(){
+          var version = changeset.value;
+          if (version){
+              
+              new Ajax({
+                method: "GET",
+                url: "get-files?version="+version
+              })
+              .success(function(xhr){
+                fileList.textContent += xhr.responseText;
+              })
+              .fail(function(){
+                alert( xhr.status + ': ' + xhr.statusText );
+              })
+
+          } else {
+              throw "No version nor label name specified!"
+          }
+        }
+        
+        function Ajax(params){
+          var onsuccess, onfail, ondone;
+          
+          setTimeout( function(){
+            var xhr = new XMLHttpRequest();
+            xhr.open(params.method, params.url, false);
+            xhr.send();
+            if (xhr.status != 200) {
+                if (onfail) onfail(xhr);
+                if (ondone) ondone(xhr);
+                
+            } else {
+                if (onsuccess) onsuccess(xhr);
+                if (ondone) ondone(xhr);
+            }
+          }, 0)
+          
+          this.success = function(callback){
+            onsuccess = callback;
+            return this
+          }
+          this.fail = function(callback){
+            onfail = callback;
+            return this
+          }
+          this.done = function(callback){
+            ondone = callback;
+            return this
+          }
+        }
+        
+      }
+      
+      var controller = new Controller;
+      
+      document.addEventListener("click", function(e){
+        try{
+          var action = e.target.getAttribute("action");
+          if (action){
+            switch(action){
+              case "clear-all": controller.clearAll(); break;
+              case "get-files": controller.getFiles(); break;
+              case "label-files": controller.labelFiles(); break;
+            }
+          }
+        } catch(e) {
+            alert(e)
+        }
+      })
+    </script>
+    <script type="text/x-tfs-stub">
+Набор изменений: 42101
+Пользователь: Вавилов Дмитрий Игоревич
+Дата: 21 января 2019 г. 14:20:12
+
+Примечание:
+  [UTH] переместил Persons2015
+
+Элементы:
+  переименовать                     $/Восточный полигон/УТХ/_DEV/Persons2015
+  переименовать                     $/Восточный полигон/УТХ/_DEV/Persons2015/CR_Persons2015.rb
+  переименовать                     $/Восточный полигон/УТХ/_DEV/Persons2015/MD_Persons2015_initialize.rb
+  переименовать                     $/Восточный полигон/УТХ/_DEV/Persons2015/MD_Persons2015_скачать.rb
+  переименовать                     $/Восточный полигон/УТХ/_DEV/Persons2015/MD_Persons2015_сохранить.rb
+  удалить, переименование источника $/Восточный полигон/УТХ/КлассыМодули/UTH_ORM_Handlers/Persons2015;X2906
+  удалить, переименование источника $/Восточный полигон/УТХ/КлассыМодули/UTH_ORM_Handlers/Persons2015/CR_Persons2015.rb;X2906
+  удалить, переименование источника $/Восточный полигон/УТХ/КлассыМодули/UTH_ORM_Handlers/Persons2015/MD_Persons2015_initialize.rb;X2906
+  удалить, переименование источника $/Восточный полигон/УТХ/КлассыМодули/UTH_ORM_Handlers/Persons2015/MD_Persons2015_скачать.rb;X2906
+  удалить, переименование источника $/Восточный полигон/УТХ/КлассыМодули/UTH_ORM_Handlers/Persons2015/MD_Persons2015_сохранить.rb;X2906
+    </script>
+    <script type="text/x-tfs-stub">
+Метка     : planner_uth_96
+Область   : $/Восточный полигон
+Владелец  : Вавилов Дмитрий Игоревич
+Дата      : 17 октября 2018 г. 12:08:17
+Примечание: метка УТХ для изменения DSL-кода
+
+Набор изменений Элемент
+--------------- ---------------------------------------------------------------
+40744           $/Восточный полигон/Релизы и инструменты сборки/Автоматическая сборка/labels.txt
+40765           $/Восточный полигон/УТХ/ruby_scripts_priority_high.txt
+39904           $/Восточный полигон/УТХ/ORM/UTH_IndivDailyMileage/CR_UTH_SectionDailyMileage.rb
+39559           $/Восточный полигон/УТХ/ORM/UTH_IndivDailyMileage/CR_UTH_SectionDailyMileageAverage.rb
+39564           $/Восточный полигон/УТХ/Quartz/Jobs/job_Quartz_DataLoading.rb
+39569           $/Восточный полигон/УТХ/Quartz/Jobs/job_Quartz_UTH_DataCleaning.rb
+39569           $/Восточный полигон/УТХ/Quartz/Sources/Quartz_DataCleaning/Quartz_UTH_DataCleaning/Quartz_UTH_DataCleaning_clean_section_daily_mileage.rb
+40239           $/Восточный полигон/УТХ/Quartz/Sources/Quartz_DataLoading/Quartz_DataLoading_loading_section_daily_mileage.rb
+39565           $/Восточный полигон/УТХ/UnitTests/КлассыМодули/UTH_Test_2014/UTH_Test_2014_test_orm.rb
+40515           $/Восточный полигон/УТХ/Web/МодулиКлассы/UTH_Class_Web_KZO_TPS_Monthly_MVC/UTH_Module_Web_KZO_TPS_Monthly_Controller/UTH_Module_Web_KZO_TPS_Monthly_Controller_get_lines.rb
+40456           $/Восточный полигон/УТХ/Web/МодулиКлассы/UTH_Class_Web_KZO_TPS_Monthly_MVC/UTH_Module_Web_KZO_TPS_Monthly_Controller/UTH_Module_Web_KZO_TPS_Monthly_Controller_get_report.rb
+40515           $/Восточный полигон/УТХ/Web/МодулиКлассы/UTH_Class_Web_KZO_TPS_Monthly_MVC/UTH_Module_Web_KZO_TPS_Monthly_View/UTH_Module_Web_KZO_TPS_Monthly_View_page_for_kzo_tps_report.rb
+40515           $/Восточный полигон/УТХ/Web/МодулиКлассы/UTH_Class_Web_KZO_TPS_Monthly_MVC/UTH_Module_Web_KZO_TPS_Monthly_View/UTH_Module_Web_KZO_TPS_Monthly_View_page_for_management.rb
+40619           $/Восточный полигон/УТХ/Web/МодулиКлассы/UTH_Class_Web_KZO_TPS_Monthly_MVC/UTH_Module_Web_KZO_TPS_Monthly_View/UTH_Module_Web_KZO_TPS_Monthly_View_page_report_third.rb
+40458           $/Восточный полигон/УТХ/Web/МодулиКлассы/UTH_Class_Web_KZO_TPS_Monthly_MVC/UTH_Module_Web_KZO_TPS_Monthly_View/UTH_Module_Web_KZO_TPS_Monthly_View_page_second_form.rb
+40642           $/Восточный полигон/УТХ/Web/МодулиКлассы/UTH_Class_Web_KZO_TPS_Monthly_MVC/UTH_Module_Web_KZO_TPS_Monthly_View/UTH_Module_Web_KZO_TPS_Monthly_View_table_head.rb
+40515           $/Восточный полигон/УТХ/Web/МодулиКлассы/UTH_Class_Web_KZO_TPS_Quarterly_MVC/UTH_Module_Web_KZO_TPS_Quarterly_Controller/UTH_Module_Web_KZO_TPS_Quarterly_Controller_get_lines.rb
+40622           $/Восточный полигон/УТХ/Web/МодулиКлассы/UTH_Class_Web_KZO_TPS_Quarterly_MVC/UTH_Module_Web_KZO_TPS_Quarterly_Controller/UTH_Module_Web_KZO_TPS_Quarterly_Controller_get_report.rb
+39881           $/Восточный полигон/УТХ/Web/МодулиКлассы/UTH_Class_Web_KZO_TPS_Quarterly_MVC/UTH_Module_Web_KZO_TPS_Quarterly_View/UTH_Module_Web_KZO_TPS_Quarterly_View_headers.rb
+40515           $/Восточный полигон/УТХ/Web/МодулиКлассы/UTH_Class_Web_KZO_TPS_Quarterly_MVC/UTH_Module_Web_KZO_TPS_Quarterly_View/UTH_Module_Web_KZO_TPS_Quarterly_View_page_for_kzo_tps_report.rb
+40515           $/Восточный полигон/УТХ/Web/МодулиКлассы/UTH_Class_Web_KZO_TPS_Quarterly_MVC/UTH_Module_Web_KZO_TPS_Quarterly_View/UTH_Module_Web_KZO_TPS_Quarterly_View_page_for_management.rb
+40619           $/Восточный полигон/УТХ/Web/МодулиКлассы/UTH_Class_Web_KZO_TPS_Quarterly_MVC/UTH_Module_Web_KZO_TPS_Quarterly_View/UTH_Module_Web_KZO_TPS_Quarterly_View_page_report_third.rb
+40458           $/Восточный полигон/УТХ/Web/МодулиКлассы/UTH_Class_Web_KZO_TPS_Quarterly_MVC/UTH_Module_Web_KZO_TPS_Quarterly_View/UTH_Module_Web_KZO_TPS_Quarterly_View_page_second_form.rb
+40642           $/Восточный полигон/УТХ/Web/МодулиКлассы/UTH_Class_Web_KZO_TPS_Quarterly_MVC/UTH_Module_Web_KZO_TPS_Quarterly_View/UTH_Module_Web_KZO_TPS_Quarterly_View_table_head.rb
+40515           $/Восточный полигон/УТХ/Web/МодулиКлассы/UTH_Class_Web_KZO_TPS_Yearly_MVC/UTH_Module_Web_KZO_TPS_Yearly_Controller/UTH_Module_Web_KZO_TPS_Yearly_Controller_get_lines.rb
+40515           $/Восточный полигон/УТХ/Web/МодулиКлассы/UTH_Class_Web_KZO_TPS_Yearly_MVC/UTH_Module_Web_KZO_TPS_Yearly_Controller/UTH_Module_Web_KZO_TPS_Yearly_Controller_get_report.rb
+40515           $/Восточный полигон/УТХ/Web/МодулиКлассы/UTH_Class_Web_KZO_TPS_Yearly_MVC/UTH_Module_Web_KZO_TPS_Yearly_View/UTH_Module_Web_KZO_TPS_Yearly_View_page_for_kzo_tps_edit.rb
+40515           $/Восточный полигон/УТХ/Web/МодулиКлассы/UTH_Class_Web_KZO_TPS_Yearly_MVC/UTH_Module_Web_KZO_TPS_Yearly_View/UTH_Module_Web_KZO_TPS_Yearly_View_page_for_management.rb
+40619           $/Восточный полигон/УТХ/Web/МодулиКлассы/UTH_Class_Web_KZO_TPS_Yearly_MVC/UTH_Module_Web_KZO_TPS_Yearly_View/UTH_Module_Web_KZO_TPS_Yearly_View_page_report_third.rb
+40458           $/Восточный полигон/УТХ/Web/МодулиКлассы/UTH_Class_Web_KZO_TPS_Yearly_MVC/UTH_Module_Web_KZO_TPS_Yearly_View/UTH_Module_Web_KZO_TPS_Yearly_View_page_second_form.rb
+40642           $/Восточный полигон/УТХ/Web/МодулиКлассы/UTH_Class_Web_KZO_TPS_Yearly_MVC/UTH_Module_Web_KZO_TPS_Yearly_View/UTH_Module_Web_KZO_TPS_Yearly_View_table_head.rb
+39924           $/Восточный полигон/УТХ/Web/МодулиКлассы/UTH_Class_Web_UR_Daily_MVC/UTH_Module_Web_UR_Daily_View/UTH_Module_Web_UR_Daily_View_m_table.rb
+40450           $/Восточный полигон/УТХ/Web/МодулиКлассы/UTH_Class_Web_UR_Daily_MVC/UTH_Module_Web_UR_Daily_View/UTH_Module_Web_UR_Daily_View_main_table.rb
+39924           $/Восточный полигон/УТХ/Web/МодулиКлассы/UTH_Class_Web_UR_Monthly_MVC/UTH_Module_Web_UR_Monthly_Controller/UTH_Module_Web_UR_Monthly_Controller_get_section_info.rb
+40181           $/Восточный полигон/УТХ/Web/МодулиКлассы/UTH_Class_Web_UR_Monthly_MVC/UTH_Module_Web_UR_Monthly_Controller/UTH_Module_Web_UR_Monthly_Controller_read_mileage.rb
+40181           $/Восточный полигон/УТХ/Web/МодулиКлассы/UTH_Class_Web_UR_Monthly_MVC/UTH_Module_Web_UR_Monthly_Controller/UTH_Module_Web_UR_Monthly_Controller_read_output_data.rb
+40258           $/Восточный полигон/УТХ/Web/МодулиКлассы/UTH_Class_Web_UR_Monthly_MVC/UTH_Module_Web_UR_Monthly_View/UTH_Module_Web_UR_Monthly_View_page_report.rb
+39924           $/Восточный полигон/УТХ/Web/МодулиКлассы/UTH_Class_Web_UR_Monthly_MVC/UTH_Module_Web_UR_Monthly_View/UTH_Module_Web_UR_Monthly_View_page_report_table_content.rb
+40181           $/Восточный полигон/УТХ/Web/МодулиКлассы/UTH_Class_Web_UR_Quarterly_MVC/UTH_Module_Web_UR_Quarterly_Controller/UTH_Module_Web_UR_Quarterly_Controller_get_data.rb
+40181           $/Восточный полигон/УТХ/Web/МодулиКлассы/UTH_Class_Web_UR_Quarterly_MVC/UTH_Module_Web_UR_Quarterly_Controller/UTH_Module_Web_UR_Quarterly_Controller_get_lines.rb
+40238           $/Восточный полигон/УТХ/Web/МодулиКлассы/UTH_Class_Web_UR_Yearly_MVC/UTH_Module_Web_UR_Yearly_Controller/UTH_Module_Web_UR_Yearly_Controller_get_data.rb
+40238           $/Восточный полигон/УТХ/Web/МодулиКлассы/UTH_Class_Web_UR_Yearly_MVC/UTH_Module_Web_UR_Yearly_Controller/UTH_Module_Web_UR_Yearly_Controller_get_lines.rb
+40238           $/Восточный полигон/УТХ/Web/МодулиКлассы/UTH_Class_Web_UR_Yearly_MVC/UTH_Module_Web_UR_Yearly_Controller/UTH_Module_Web_UR_Yearly_Controller_read_input_data.rb
+40621           $/Восточный полигон/УТХ/Web/МодулиКлассы/UTH_Class_Web_UR_Yearly_MVC/UTH_Module_Web_UR_Yearly_View/UTH_Module_Web_UR_Yearly_View_depot_body.rb
+12558           $/Восточный полигон/УТХ/Web/МодулиКлассы/UTH_Class_Web_UR_Yearly_MVC/UTH_Module_Web_UR_Yearly_View/UTH_Module_Web_UR_Yearly_View_error_page.rb
+40621           $/Восточный полигон/УТХ/Web/МодулиКлассы/UTH_Class_Web_UR_Yearly_MVC/UTH_Module_Web_UR_Yearly_View/UTH_Module_Web_UR_Yearly_View_factory_body.rb
+40571           $/Восточный полигон/УТХ/Web/МодулиКлассы/UTH_Class_Web_UR_Yearly_MVC/UTH_Module_Web_UR_Yearly_View/UTH_Module_Web_UR_Yearly_View_format.rb
+40571           $/Восточный полигон/УТХ/Web/МодулиКлассы/UTH_Class_Web_UR_Yearly_MVC/UTH_Module_Web_UR_Yearly_View/UTH_Module_Web_UR_Yearly_View_page_by_time.rb
+40571           $/Восточный полигон/УТХ/Web/МодулиКлассы/UTH_Class_Web_UR_Yearly_MVC/UTH_Module_Web_UR_Yearly_View/UTH_Module_Web_UR_Yearly_View_page_for_depot_fail.rb
+40571           $/Восточный полигон/УТХ/Web/МодулиКлассы/UTH_Class_Web_UR_Yearly_MVC/UTH_Module_Web_UR_Yearly_View/UTH_Module_Web_UR_Yearly_View_page_for_factory_fail.rb
+40571           $/Восточный полигон/УТХ/Web/МодулиКлассы/UTH_Class_Web_UR_Yearly_MVC/UTH_Module_Web_UR_Yearly_View/UTH_Module_Web_UR_Yearly_View_page_percent.rb
+39924           $/Восточный полигон/УТХ/Web/МодулиКлассы/UTH_Class_WebController_MethodExecutor2014/UTH_Module_WebController_MethodExecutor2014/UTH_Module_WebController_MethodExecutor2014_mounted_axle_info.rb
+39924           $/Восточный полигон/УТХ/Web/МодулиКлассы/UTH_Class_WebController_MethodExecutor2014/UTH_Module_WebController_MethodExecutor2014/UTH_Module_WebController_MethodExecutor2014_wage_wheel_info.rb
+39987           $/Восточный полигон/УТХ/Web/МодулиКлассы/UTH_Class_WebService_KZO_LB_Yearly_CrewTask_Limit/UTH_Module_WebService_KZO_LB_Yearly_CrewTask_Limit/UTH_Module_WebService_KZO_LB_Yearly_CrewTask_Limit_get_html.rb
+39987           $/Восточный полигон/УТХ/Web/МодулиКлассы/UTH_Class_WebService_KZO_LB_Yearly_CrewTask_Order/UTH_Module_WebService_KZO_LB_Yearly_CrewTask_Order/UTH_Module_WebService_KZO_LB_Yearly_CrewTask_Order_get_html.rb
+39924           $/Восточный полигон/УТХ/Web/МодулиКлассы/UTH_Class_WebService_UR_TPS_ConditionRepairs/UTH_Module_WebService_UR_TPS_ConditionRepairs/UTH_Module_WebService_UR_TPS_ConditionRepairs_get_html.rb
+39608           $/Восточный полигон/УТХ/Web/МодулиКлассы/UTH_HTML_Builder/CR_UTH_HTML_Builder.rb
+39608           $/Восточный полигон/УТХ/Web/МодулиКлассы/UTH_HTML_Builder/UTH_HTML_Builder_append.rb
+39624           $/Восточный полигон/УТХ/Web/МодулиКлассы/UTH_HTML_Builder/UTH_HTML_Builder_comment.rb
+39608           $/Восточный полигон/УТХ/Web/МодулиКлассы/UTH_HTML_Builder/UTH_HTML_Builder_create.rb
+39608           $/Восточный полигон/УТХ/Web/МодулиКлассы/UTH_HTML_Builder/UTH_HTML_Builder_format.rb
+39608           $/Восточный полигон/УТХ/Web/МодулиКлассы/UTH_HTML_Builder/UTH_HTML_Builder_format_name.rb
+39624           $/Восточный полигон/УТХ/Web/МодулиКлассы/UTH_HTML_Builder/UTH_HTML_Builder_initialize.rb
+39608           $/Восточный полигон/УТХ/Web/МодулиКлассы/UTH_HTML_Builder/UTH_HTML_Builder_prepend.rb
+39624           $/Восточный полигон/УТХ/Web/МодулиКлассы/UTH_HTML_Builder/UTH_HTML_Builder_text.rb
+39599           $/Восточный полигон/УТХ/Web/МодулиКлассы/UTH_Module_HtmlTable/cr_UTH_HtmlTable.rb
+39599           $/Восточный полигон/УТХ/Web/МодулиКлассы/UTH_Module_HtmlTable/md_UTH_HtmlTable.rb
+39621           $/Восточный полигон/УТХ/Web/МодулиКлассы/UTH_Module_WebController/UTH_Module_WebController_get_user_roads_and_depots.rb
+39892           $/Восточный полигон/УТХ/Web/МодулиКлассы/UTH_WebPages_Tps2014/UTH_WebPages_Tps2014_main_ur_tps_monthly.rb
+39892           $/Восточный полигон/УТХ/Web/МодулиКлассы/UTH_WebPages_Tps2014/UTH_WebPages_Tps2014_main_ur_tps_quarterly.rb
+39892           $/Восточный полигон/УТХ/Web/МодулиКлассы/UTH_WebPages_Tps2014/UTH_WebPages_Tps2014_main_ur_tps_yearly.rb
+40315           $/Восточный полигон/УТХ/Web/МодулиКлассы/UTH_WebPages_Tps2015/UTH_WebPages_Tps2015_main_kzo_lb_monthly.rb
+40315           $/Восточный полигон/УТХ/Web/МодулиКлассы/UTH_WebPages_Tps2015/UTH_WebPages_Tps2015_main_kzo_lb_quarterly.rb
+40315           $/Восточный полигон/УТХ/Web/МодулиКлассы/UTH_WebPages_Tps2015/UTH_WebPages_Tps2015_main_kzo_lb_yearly.rb
+40315           $/Восточный полигон/УТХ/Web/МодулиКлассы/UTH_WebPages_Tps2015/UTH_WebPages_Tps2015_template_page.rb
+39616           $/Восточный полигон/УТХ/КлассыМодули/UTH_FileLogger/CR_UTH_FileLogger.rb
+39558           $/Восточный полигон/УТХ/КлассыМодули/UTH_Hardcode/UTH_Hardcode_loco_oper_park_type.rb
+40620           $/Восточный полигон/УТХ/КлассыМодули/UTH_LastSectOperHandler/UTH_LastSectOperHandler_получить_пробеги_и_нормы_секций.rb
+40620           $/Восточный полигон/УТХ/КлассыМодули/UTH_MileagesNorms/UTH_MileagesNorms_get_data.rb
+40620           $/Восточный полигон/УТХ/КлассыМодули/UTH_MileagesNorms/UTH_MileagesNorms_get_mileages_and_norms.rb
+39557           $/Восточный полигон/УТХ/КлассыМодули/UTH_NSI/CR_UTH_NSI.rb
+39557           $/Восточный полигон/УТХ/КлассыМодули/UTH_NSI/UTH_NSI__initialize.rb
+39607           $/Восточный полигон/УТХ/КлассыМодули/UTH_NSI/UTH_NSI_имя.rb
+39607           $/Восточный полигон/УТХ/КлассыМодули/UTH_NSI/UTH_NSI_код.rb
+39607           $/Восточный полигон/УТХ/КлассыМодули/UTH_NSI/UTH_NSI_получить.rb
+39607           $/Восточный полигон/УТХ/КлассыМодули/UTH_NSI/UTH_NSI_получить_дороги_и_депо.rb
+39557           $/Восточный полигон/УТХ/КлассыМодули/UTH_NSI/UTH_NSI_получить_серии_и_группы_серий.rb
+39557           $/Восточный полигон/УТХ/КлассыМодули/UTH_NSI/UTH_NSI_получить_типы_операций_с_локомотивами.rb
+39562           $/Восточный полигон/УТХ/КлассыМодули/UTH_ORM_Handlers/UTH_ORM_Handlers__get.rb
+39887           $/Восточный полигон/УТХ/КлассыМодули/UTH_ORM_Handlers/UTH_ORM_Handlers__orm_document_name.rb
+39618           $/Восточный полигон/УТХ/КлассыМодули/UTH_ORM_Handlers/UTH_ORM_Handlers_initialize.rb
+39618           $/Восточный полигон/УТХ/КлассыМодули/UTH_ORM_Handlers/UTH_ORM_Handlers_log.rb
+39561           $/Восточный полигон/УТХ/КлассыМодули/UTH_ORM_Handlers/UTH_ORM_Handlers_to_hash.rb
+39563           $/Восточный полигон/УТХ/КлассыМодули/UTH_ORM_Handlers/UTH_ORM_Handlers_to_ruby.rb
+39569           $/Восточный полигон/УТХ/КлассыМодули/UTH_ORM_Handlers/Quartz_Log/UTH_QuartzLogHandler_initialize.rb
+39569           $/Восточный полигон/УТХ/КлассыМодули/UTH_ORM_Handlers/Quartz_Log/UTH_QuartzLogHandler_record_builder.rb
+39562           $/Восточный полигон/УТХ/КлассыМодули/UTH_ORM_Handlers/SectionDailyMileage/CR_UTH_SectionDailyMileageHandler.rb
+39562           $/Восточный полигон/УТХ/КлассыМодули/UTH_ORM_Handlers/SectionDailyMileage/UTH_SectionDailyMileageHandler_calculate_speed.rb
+39569           $/Восточный полигон/УТХ/КлассыМодули/UTH_ORM_Handlers/SectionDailyMileage/UTH_SectionDailyMileageHandler_initialize.rb
+39569           $/Восточный полигон/УТХ/КлассыМодули/UTH_ORM_Handlers/SectionDailyMileage/UTH_SectionDailyMileageHandler_очистить.rb
+39562           $/Восточный полигон/УТХ/КлассыМодули/UTH_ORM_Handlers/SectionDailyMileage/UTH_SectionDailyMileageHandler_получить_код_группы_серий.rb
+39562           $/Восточный полигон/УТХ/КлассыМодули/UTH_ORM_Handlers/SectionDailyMileage/UTH_SectionDailyMileageHandler_получить_пробег_и_время_в_ЭП.rb
+39619           $/Восточный полигон/УТХ/КлассыМодули/UTH_ORM_Handlers/SectionDailyMileage/UTH_SectionDailyMileageHandler_получить_расчетный_период.rb
+39562           $/Восточный полигон/УТХ/КлассыМодули/UTH_ORM_Handlers/SectionDailyMileage/UTH_SectionDailyMileageHandler_получить_списки.rb
+39562           $/Восточный полигон/УТХ/КлассыМодули/UTH_ORM_Handlers/SectionDailyMileage/UTH_SectionDailyMileageHandler_скачать_из_ВИВСД.rb
+39568           $/Восточный полигон/УТХ/КлассыМодули/UTH_ORM_Handlers/SectionDailyMileage/UTH_SectionDailyMileageHandler_сохранить_в_УТХ.rb
+39570           $/Восточный полигон/УТХ/КлассыМодули/UTH_ORM_Handlers/SectionDailyMileage/UTH_SectionDailyMileageHandler_сохранить_среднесуточные_пробеги.rb
+39562           $/Восточный полигон/УТХ/КлассыМодули/UTH_ORM_Handlers/SectionDailyMileage/UTH_SectionDailyMileageHandler_сохранить_срезы.rb
+39562           $/Восточный полигон/УТХ/КлассыМодули/UTH_ORM_Handlers/SectionDailyMileage/UTH_SectionDailyMileageHandler_сформировать_коды.rb
+39562           $/Восточный полигон/УТХ/КлассыМодули/UTH_ORM_Handlers/SectionDailyMileage/UTH_SectionDailyMileageHandler_эксплуатируемый_парк.rb
+39569           $/Восточный полигон/УТХ/КлассыМодули/UTH_ORM_Handlers/UTH_Constants/UTH_ConstantsHandler_default_values.rb
+39617           $/Восточный полигон/УТХ/КлассыМодули/UthScriptRunner/md_UthScriptRunner.rb
+40623           $/Восточный полигон/УТХ/Планировщики/Core/UTH_Module_TempBasePlanner/UTH_Module_TempBasePlanner_get_required_locomotive_series.rb
+39967           $/Восточный полигон/УТХ/Планировщики/Core/UTH_PlannerExecutionStrategy_DefaultUsingJars/UTH_PlannerExecutionStrategy_DefaultUsingJars_создать_планировщик.rb
+39967           $/Восточный полигон/УТХ/Планировщики/Core/UTH_PlannerExecutionStrategy_DefaultUsingJars/UTH_PlannerExecutionStrategy_DefaultUsingJars_удалить_планировщик.rb
+39840           $/Восточный полигон/УТХ/Планировщики/Planners/UTH_Class_Planner_KZO_TPS_Monthly/UTH_Module_Planner_KZO_TPS_Monthly/UTH_Module_Planner_KZO_TPS_Monthly_create_selectors_queue.rb
+40767           $/Восточный полигон/УТХ/Планировщики/Planners/UTH_Class_Planner_KZO_TPS_Yearly/UTH_Class_Planner_KZO_TPS_Yearl_Second/UTH_Module_Planner_KZO_TPS_Yearly_Second/UTH_Module_Planner_KZO_TPS_Yearly_Second_crt_sel_q.rb
+40181           $/Восточный полигон/УТХ/Планировщики/Planners/UTH_Class_Planner_UR_TPS_Monthly/UTH_Module_Planner_UR_TPS_Monthly/UTH_Module_Planner_UR_TPS_Monthly_create_selectors_queue.rb
+40181           $/Восточный полигон/УТХ/Планировщики/Planners/UTH_Class_Planner_UR_TPS_Quarterly/UTH_Module_Planner_UR_TPS_Quarterly/UTH_Module_Planner_UR_TPS_Quarterly_create_selectors_queue.rb
+40141           $/Восточный полигон/УТХ/Планировщики/Planners/UTH_Class_Planner_UR_TPS_Yearly/UTH_Module_Planner_UR_TPS_Yearly/UTH_Module_Planner_UR_TPS_Yearly_create_selectors_queue.rb
+39840           $/Восточный полигон/УТХ/Планировщики/КлассыМодули/UTH_Class_DataCollector_KzoTpsMonthSection/UTH_Module_DataCollector_KzoTpsMonthSection/UTH_Module_DataCollector_KzoTpsMonthSection_callable_process_data.rb
+39840           $/Восточный полигон/УТХ/Планировщики/КлассыМодули/UTH_Class_DataCollector_KzoTpsQuartSections/UTH_Module_DataCollector_KzoTpsQuartSections/UTH_Module_DataCollector_KzoTpsQuartSections_call.rb
+40765           $/Восточный полигон/УТХ/Планировщики/КлассыМодули/UTH_Class_DataCollector_KzoTpsYearSecondSection/crt_UTH_Class_DataCollector_KzoTpsYearSecondSection.rb
+40765           $/Восточный полигон/УТХ/Планировщики/КлассыМодули/UTH_Class_DataCollector_KzoTpsYearSecondSection/UTH_Module_DataCollector_KzoTpsYearSecondSection/cr_UTH_Module_DataCollector_KzoTpsYearSecondSection.rb
+40767           $/Восточный полигон/УТХ/Планировщики/КлассыМодули/UTH_Class_DataCollector_KzoTpsYearSecondSection/UTH_Module_DataCollector_KzoTpsYearSecondSection/UTH_Module_DataCollector_KzoTpsYearSecondSection_cl_pr_data.rb
+39603           $/Восточный полигон/УТХ/Планировщики/КлассыМодули/UTH_Class_DataCollector_KzoTpsYearSection/UTH_Module_DataCollector_KzoTpsYearSection/UTH_Module_DataCollector_KzoTpsYearSection_call.rb
+39840           $/Восточный полигон/УТХ/Планировщики/КлассыМодули/UTH_Class_DataCollector_KzoTpsYearSection/UTH_Module_DataCollector_KzoTpsYearSection/UTH_Module_DataCollector_KzoTpsYearSection_callable_process_data.rb
+40140           $/Восточный полигон/УТХ/Планировщики/КлассыМодули/UTH_Class_DataCollector_UrTpsDecadeAverageMileage/UTH_Module_DataCollector_UrTpsDecadeAverageMileage/UTH_Module_DataCollector_UrTpsDecadeAverageMileage_initialize.rb
+40140           $/Восточный полигон/УТХ/Планировщики/КлассыМодули/UTH_Class_DataCollector_UrTpsMonthAverageMileage/UTH_Module_DataCollector_UrTpsMonthAverageMileage/UTH_Module_DataCollector_UrTpsMonthAverageMileage_initialize.rb
+40140           $/Восточный полигон/УТХ/Планировщики/КлассыМодули/UTH_Class_DataCollector_UrTpsQuartRepairCapacity/UTH_Module_DataCollector_UrTpsQuartRepairCapacity/UTH_Module_DataCollector_UrTpsQuartRepairCapacity_call.rb
+40140           $/Восточный полигон/УТХ/Планировщики/КлассыМодули/UTH_Class_DataCollector_UrTpsYearlyAverageMileage/UTH_Module_DataCollector_UrTpsYearlyAverageMileage/UTH_Module_DataCollector_UrTpsYearlyAverageMileage_call.rb
+40475           $/Восточный полигон/УТХ/Планировщики/КлассыМодули/UTH_Class_DataCollector_UrTpsYearlyCiclogramForbidden/UTH_Module_DataCollector_UrTpsYearlyCiclogramForbidden/UTH_Module_DataCollector_UrTpsYearlyCiclForb_call.rb
+40141           $/Восточный полигон/УТХ/Планировщики/КлассыМодули/UTH_Class_DataCollector_UrTpsYearlyConsHourRepair/UTH_Module_DataCollector_UrTpsYearlyConsHourRepair/UTH_Module_DataCollector_UrTpsYearlyConsHourRepair_call.rb
+40241           $/Восточный полигон/УТХ/Планировщики/КлассыМодули/UTH_Class_DataCollector_UrTpsYearlyLocoSeriesRepair/UTH_Module_DC_UrTpsYearlyLocoSeriesRepair/UTH_Module_DC_UrTpsYearlyLocoSeriesRepair_call.rb
+40241           $/Восточный полигон/УТХ/Планировщики/КлассыМодули/UTH_Class_DataCollector_UrTpsYearlyLocoSeriesRepair/UTH_Module_DC_UrTpsYearlyLocoSeriesRepair/UTH_Module_DC_UrTpsYearlyLocoSeriesRepair_get_ind_mil.rb
+40241           $/Восточный полигон/УТХ/Планировщики/КлассыМодули/UTH_Class_DataCollector_UrTpsYearlyLocoSeriesRepair/UTH_Module_DC_UrTpsYearlyLocoSeriesRepair/UTH_Module_DC_UrTpsYearlyLocoSeriesRepair_get_series_mil.rb
+40623           $/Восточный полигон/УТХ/Планировщики/КлассыМодули/UTH_Class_DataCollector_UrTpsYearlyRepairCapacity/UTH_Module_DataCollector_UrTpsYearlyRepairCapacity/UTH_Module_DataCollector_UrTpsYearlyRepairCapacity_call.rb
+39840           $/Восточный полигон/УТХ/Планировщики/КлассыМодули/UTH_Class_PerceptCreator_KzoTpsQuart/UTH_Module_PerceptCreator_KzoTpsQuart/UTH_Module_PerceptCreator_KzoTpsQuart_percept_sections.rb
+39840           $/Восточный полигон/УТХ/Планировщики/КлассыМодули/UTH_Class_PerceptCreator_KzoTpsYearFirst/UTH_Module_PerceptCreator_KzoTpsYearFirst/UTH_Module_PerceptCreator_KzoTpsYearFirst_percept_section.rb
+40181           $/Восточный полигон/УТХ/Планировщики/КлассыМодули/UTH_Class_PerceptCreator_UrTpsMonth/UTH_Module_PerceptCreator_UrTpsMonth/UTH_Module_PerceptCreator_UrTpsMonth_call.rb
+40181           $/Восточный полигон/УТХ/Планировщики/КлассыМодули/UTH_Class_PerceptCreator_UrTpsMonth/UTH_Module_PerceptCreator_UrTpsMonth/UTH_Module_PerceptCreator_UrTpsMonth_percept_loco_series_repair.rb
+40181           $/Восточный полигон/УТХ/Планировщики/КлассыМодули/UTH_Class_PerceptCreator_UrTpsQuart/UTH_Module_PerceptCreator_UrTpsQuart/UTH_Module_PerceptCreator_UrTpsQuart_call.rb
+40181           $/Восточный полигон/УТХ/Планировщики/КлассыМодули/UTH_Class_PerceptCreator_UrTpsQuart/UTH_Module_PerceptCreator_UrTpsQuart/UTH_Module_PerceptCreator_UrTpsQuart_percept_loco_series_repair.rb
+40460           $/Восточный полигон/УТХ/Планировщики/КлассыМодули/UTH_Class_PerceptCreator_UrTpsYear/UTH_Module_PerceptCreator_UrTpsYear/UTH_Module_PerceptCreator_UrTpsYear_percept_ciclogram_forbidden.rb
+40141           $/Восточный полигон/УТХ/Планировщики/КлассыМодули/UTH_Class_PerceptCreator_UrTpsYear/UTH_Module_PerceptCreator_UrTpsYear/UTH_Module_PerceptCreator_UrTpsYear_percept_loco_series_repair.rb
+40140           $/Восточный полигон/УТХ/Планировщики/КлассыМодули/UTH_Class_PlannerUtils2014/UTH_Module_PlannerUtils2014/UTH_Module_PlannerUtils2014_get_average_mileages_by_depot.rb
+40140           $/Восточный полигон/УТХ/Планировщики/КлассыМодули/UTH_Class_PlannerUtils2014/UTH_Module_PlannerUtils2014/UTH_Module_PlannerUtils2014_get_decade_time_range.rb
+39975           $/Восточный полигон/УТХ/Планировщики/КлассыМодули/UTH_Class_PlannerUtils2015/UTH_Module_PlannerUtils2015/UTH_Module_PlannerUtils2015_get_percept_depot_order.rb
+
+    </script>
+  </body>
+</html>
